@@ -1,0 +1,52 @@
+version: '3'
+
+services:
+  nginx:
+    image: nginx:1.13
+    container_name: nginx
+    depends_on:
+      - server
+    volumes:
+      - ./nginx/nginx.conf:/etc/nginx/nginx.conf
+    ports:
+      - "81:80"
+
+  client:
+    build: ./client
+    container_name: client
+    depends_on:
+      - server
+    links:
+      - server
+    environment:
+      - API_URL=http://server:3001
+
+    restart: always
+    volumes:
+      - ./client:/usr/app
+    working_dir: /usr/app
+    command: yarn run dev
+    expose:
+      - "3000"
+    ports:
+      - "3000:3000"
+
+  server:
+    build: ./server
+    container_name: server
+    volumes:
+      - ./server:/usr/app
+    working_dir: /usr/app
+    command: yarn run dev
+    expose:
+      - "3001"
+    ports:
+      - "3001:3001"
+
+  redis:
+    build: ./db
+    container_name: redis
+    expose:
+      - "6379"
+    ports:
+      - "6379:6379"

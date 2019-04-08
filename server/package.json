@@ -1,0 +1,14 @@
+{
+  "name": "server",
+  "version": "1.0.0",
+  "main": "index.js",
+  "license": "MIT",
+  "scripts": {
+    "predev": "if [ ! -d node_modules ]; then yarn; fi",
+    "dev": "nodemon src/index.js"
+  },
+  "devDependencies": {
+    "express": "^4.16.4",
+    "redis": "^2.8.0"
+  }
+}
